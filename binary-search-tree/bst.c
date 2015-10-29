@@ -38,7 +38,7 @@ int contains_key(BST* t, int key) {
   while ((curr != NULL) || (curr->key != key)) {
     if (key < curr->key) {
       curr = curr->left;
-    } else {
+    } else if (key > curr->key) {
       curr = curr->right;
     }
   }
@@ -50,7 +50,7 @@ int get(BST* t, int key) {
   while ((curr != NULL) || (curr->key != key)) {
     if (key < curr->key) {
       curr = curr->left;
-    } else {
+    } else if (key > curr->key) {
       curr = curr->right;
     }
   }
@@ -90,7 +90,7 @@ void insert(BST* t, int key, int value) {
     init_node(parent->left);
     parent->left->key = key;
     parent->left->value = value;
-  } else {
+  } else if (key > parent->key) {
     parent->right = malloc(sizeof(Node));
     init_node(parent->right);
     parent->right->key = key;
@@ -117,12 +117,10 @@ void replace_child(BST* t, Node* parent, Node* old_child, Node* new_child) {
 void replace_node(BST* t, Node* nd, Node* nd_parent) {
   if (nd->left == NULL) {
     replace_child(t, nd_parent, nd, nd->right);
-    free(nd);
     return;
   }
   if (nd->right == NULL) {
     replace_child(t, nd_parent, nd, nd->left);
-    free(nd);
     return;
   }
 
@@ -139,7 +137,6 @@ void replace_node(BST* t, Node* nd, Node* nd_parent) {
   curr->right = nd->right;
 
   replace_child(t, nd_parent, nd, curr);
-  free(nd);
 }
 
 int delete(BST* t, int key) {
@@ -150,7 +147,7 @@ int delete(BST* t, int key) {
     parent = curr;
     if (key < curr->key) {
       curr = curr->left;
-    } else {
+    } else if (key > curr->key) {
       curr = curr->right;
     }
   }
@@ -160,6 +157,7 @@ int delete(BST* t, int key) {
     return -1;
   } else {
     replace_node(t, curr, parent);
+    free(curr);
   }
 
   t->size--;
