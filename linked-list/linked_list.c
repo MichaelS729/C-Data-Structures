@@ -1,12 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "node.h"
-
-typedef struct linked_list_t {
-  int size;
-  Node* head;
-  Node* tail;
-} LinkedList;
+#include "linked_list.h"
 
 int size(LinkedList* l) {
   return l->size;
